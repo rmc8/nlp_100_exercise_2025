@@ -31,35 +31,40 @@ sagemaker_studio_lab = """
 <span class="btn__text-container">SageMaker</span>
 """
 
+
 def modify_html():
     # Modify the generated HTML files.
-    for src in glob.glob('_build/html/**/*.html', recursive=True):
-        print(f'Updating: {src}')
-        
+    for src in glob.glob("_build/html/**/*.html", recursive=True):
+        print(f"Updating: {src}")
+
         # Load the HTML content.
         with open(src) as fi:
             content = fi.read()
-            
+
         # Find the path to .ipynb
-        path = ''
-        m = re.search(r'"https://colab.research.google.com/github/nlp100/2025/blob/main/ja/([^"]+)"', content)
+        path = ""
+        m = re.search(
+            r'"https://colab.research.google.com/github/nlp100/2025/blob/main/ja/([^"]+)"',
+            content,
+        )
         if m is not None:
             path = m.group(1)
-            print(f'    path: {path}')
-        
+            print(f"    path: {path}")
+
         # Add meta tags for Twitter card.
-        content = content.replace('</head>', twitter_card)
-        
+        content = content.replace("</head>", twitter_card)
+
         # Add the button for SageMaker Studio Lab.
         if path:
             content = content.replace(
                 '<span class="btn__text-container">Colab</span>',
-                sagemaker_studio_lab.format(path)
-                )
-        
+                sagemaker_studio_lab.format(path),
+            )
+
         # Write out the HTML content.
-        with open(src, 'w') as fo:
+        with open(src, "w") as fo:
             fo.write(content)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     modify_html()
